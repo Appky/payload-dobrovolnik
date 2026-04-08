@@ -12,6 +12,19 @@ import { Posts } from './collections/Posts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const postgresURL = process.env.POSTGRES_URL || process.env.DATABASE_URL
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN
+const isVercelDeployment = process.env.VERCEL === '1'
+
+if (!postgresURL) {
+  throw new Error('Missing database connection string. Set POSTGRES_URL or DATABASE_URL.')
+}
+
+if (isVercelDeployment && !blobToken) {
+  throw new Error(
+    'Missing BLOB_READ_WRITE_TOKEN. Media uploads on Vercel require Vercel Blob storage to be configured.',
+  )
+}
 
 export default buildConfig({
   admin: {
@@ -40,16 +53,18 @@ export default buildConfig({
   },
   db: vercelPostgresAdapter({
     pool: {
-      connectionString: process.env.POSTGRES_URL || '',
+      connectionString: postgresURL,
     },
   }),
   sharp,
   plugins: [
-    ...(process.env.BLOB_READ_WRITE_TOKEN
+    ...(blobToken
       ? [
           vercelBlobStorage({
             collections: { media: true },
-            token: process.env.BLOB_READ_WRITE_TOKEN,
+            // Upload directly from the browser to avoid Vercel's request size limits.
+            clientUploads: true,
+            token: blobToken,
           }),
         ]
       : []),
