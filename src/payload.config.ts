@@ -19,6 +19,13 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: '— dobrovolnik.cz',
+    },
+    components: {
+      beforeLogin: ['@/components/BeforeLogin'],
+      beforeDashboard: ['@/components/BeforeDashboard'],
+    },
   },
   collections: [Users, Media, Posts],
   cors: [
