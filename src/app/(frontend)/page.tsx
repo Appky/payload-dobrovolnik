@@ -1,8 +1,6 @@
 import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import React from 'react'
-import { fileURLToPath } from 'url'
 
 import config from '@/payload.config'
 import './styles.css'
@@ -13,46 +11,40 @@ export default async function HomePage() {
   const payload = await getPayload({ config: payloadConfig })
   const { user } = await payload.auth({ headers })
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
-
   return (
     <div className="home">
       <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
+        <svg
+          className="brand-logo"
+          viewBox="0 0 268 48"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g transform="translate(4 4) scale(0.8)">
+            <path d="M20 20 C20 14 23.2 10.8 27 11.2 C30.4 11.6 32.5 14.8 31.8 18.2 C31.1 21.9 27.6 24.5 23.8 23.8 L20 20 Z" fill="#DCE5BF" />
+            <path d="M20 20 C20 14 23.2 10.8 27 11.2 C30.4 11.6 32.5 14.8 31.8 18.2 C31.1 21.9 27.6 24.5 23.8 23.8 L20 20 Z" fill="#B7D0A5" transform="rotate(60 20 20)" />
+            <path d="M20 20 C20 14 23.2 10.8 27 11.2 C30.4 11.6 32.5 14.8 31.8 18.2 C31.1 21.9 27.6 24.5 23.8 23.8 L20 20 Z" fill="#7FAE96" transform="rotate(120 20 20)" />
+            <path d="M20 20 C20 14 23.2 10.8 27 11.2 C30.4 11.6 32.5 14.8 31.8 18.2 C31.1 21.9 27.6 24.5 23.8 23.8 L20 20 Z" fill="#2C5C57" transform="rotate(180 20 20)" />
+            <path d="M20 20 C20 14 23.2 10.8 27 11.2 C30.4 11.6 32.5 14.8 31.8 18.2 C31.1 21.9 27.6 24.5 23.8 23.8 L20 20 Z" fill="#7FAE96" transform="rotate(240 20 20)" />
+            <path d="M20 20 C20 14 23.2 10.8 27 11.2 C30.4 11.6 32.5 14.8 31.8 18.2 C31.1 21.9 27.6 24.5 23.8 23.8 L20 20 Z" fill="#B7D0A5" transform="rotate(300 20 20)" />
+            <circle cx="20" cy="20" r="2" fill="#F2B7A8" />
+          </g>
+          <text x="49" y="28" fill="#7FAE96" fontFamily="Arial, Helvetica, sans-serif" fontSize="22" fontWeight="700" letterSpacing="-0.44">
+            dobrovolnik.cz
+          </text>
+        </svg>
+
+        {user
+          ? <h1>Vítejte zpět, <span className="email">{user.email}</span></h1>
+          : <h1>Administrace obsahu</h1>
+        }
+        <p className="subtitle">Správa blogu a médií pro dobrovolnik.cz</p>
+
         <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
+          <a className="admin" href={payloadConfig.routes.admin}>
+            Přejít do administrace
           </a>
         </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
       </div>
     </div>
   )
