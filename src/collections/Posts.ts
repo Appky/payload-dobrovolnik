@@ -9,9 +9,6 @@ export const Posts: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'publishedAt', '_status'],
   },
-  versions: {
-    drafts: true,
-  },
   fields: [
     {
       name: 'title',
