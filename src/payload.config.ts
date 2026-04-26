@@ -61,7 +61,11 @@ export default buildConfig({
     ...(blobToken
       ? [
           vercelBlobStorage({
-            collections: { media: true },
+            collections: {
+              media: {
+                disablePayloadAccessControl: true,
+              },
+            },
             // Upload directly from the browser to avoid Vercel's request size limits.
             clientUploads: true,
             token: blobToken,
